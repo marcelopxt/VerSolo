@@ -1,11 +1,11 @@
 <?php
 
+use App\Http\Controllers\AnalysisController;
+use App\Http\Controllers\HistoryController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return view('home');
-});
+Route::get('/', [AnalysisController::class, 'uploadFiles']);
 
-Route::get('/about', function () {
-    return view('about');
-});
+Route::post('/report', [AnalysisController::class, 'reportFiles']);
+
+Route::get('/history', [HistoryController::class, 'history']);

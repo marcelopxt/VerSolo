@@ -3,8 +3,9 @@
 @section('title', 'VerSolo | Início')
 
 @section('content')
-  @if (!empty($filename))
-    <h1>{{$filename}}</h1>
+  @if (!empty($filename) && !empty($report))
+    <h1>Arquivo: {{$filename}}</h1>
+    <p>{{$report}}</p>
   @endif
   <form action="/report" method="post" enctype="multipart/form-data">
     @csrf

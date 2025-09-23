@@ -10,10 +10,10 @@ class PdfController extends Controller
     public function readPdf(Request $request)
     {
         $request->validate([
-            'pdf_file' => 'required|mimes:pdf'
+            'file' => 'required|mimes:pdf'
         ]);
 
-        $pdfFile = $request->file('pdf_file')->getPathname();
+        $pdfFile = $request->file('file')->getPathname();
 
         $parser = new Parser();
         $pdf = $parser->parseFile($pdfFile);
@@ -23,6 +23,6 @@ class PdfController extends Controller
 
         // dd($text, $metadata);
 
-        return view('pdf-content', ['text' => $text]);
+        return $text;
     }
 }

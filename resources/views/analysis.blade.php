@@ -8,8 +8,11 @@
   @endif
   <form action="/report" method="post" enctype="multipart/form-data">
     @csrf
-    <label>Selecione arquivo para análise:</label>
-    <input type="file" name="file" id="file-input" required>
-    <button type="submit">Analisar</button>
+    <div class="mb-3">
+      <label for="" class="form-label">Choose file</label>
+      <input type="file" class="form-control" name="file" id="input-file" />
+      <br>
+      <button type="submit" class="btn btn-outline-dark">Enviar</button>
+    </div>
   </form>
 @endsection

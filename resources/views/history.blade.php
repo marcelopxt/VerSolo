@@ -3,5 +3,5 @@
 @section('title', 'VerSolo | Histórico')
 
 @section('content')
-  <!-- Página de Histórico de Consultas -->
+  <h2>Histórico</h2>
 @endsection

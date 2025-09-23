@@ -5,11 +5,13 @@
   <meta charset="UTF-8">
   <title>@yield('title', 'VerSolo')</title>
   @vite(['resources/css/app.css', 'resources/js/app.js'])
+  <link rel="icon" href="{{ asset('favicon.ico') }}" type="image/x-icon">
+  <link rel="shortcut icon" href="{{ asset('favicon.ico') }}" type="image/x-icon">
 </head>
 
 <body>
   <div class="sidebar">
-    <h2><i class="bi bi-leaf"></i>VerSolo</h2>
+    <h2><i class="bi bi-leaf"></i> VerSolo</h2>
     <ul class="nav flex-column">
       <li class="nav-item"><a class="nav-link {{ request()->is('/') ? 'active' : '' }}" href="/"><i
             class="bi bi-file-earmark-check"></i> Realizar Análises</a>

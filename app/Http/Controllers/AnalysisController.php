@@ -8,13 +8,18 @@ class AnalysisController extends Controller
 {
     public function uploadFiles()
     {
-        return view('analisys.blade.php');
+        return view('analysis');
     }
 
-    public function reportFiles()
+    public function reportFiles(Request $request)
     {
-        // manda o request para PdfController que retorna o $report
-        return view('analisys.blade.php');
-        // return view('analisys.blade.php', $report); <- $report conterá os dados de resultado da consulta (protocolo, )
+        $file = $request->file('file');
+
+        if ($file) {
+            $filename = $file->getClientOriginalName();
+        }
+
+        return view('analysis', ['filename' => $filename]);
     }
+
 }

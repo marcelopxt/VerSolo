@@ -3,10 +3,13 @@
 @section('title', 'VerSolo | Início')
 
 @section('content')
-  <form action="/report" method="post">
+  @if (!empty($filename))
+    <h1>{{$filename}}</h1>
+  @endif
+  <form action="/report" method="post" enctype="multipart/form-data">
     @csrf
     <label>Selecione arquivo para análise:</label>
-    <input type="file" name="files" id="file-input" required>
+    <input type="file" name="file" id="file-input" required>
     <button type="submit">Analisar</button>
   </form>
 @endsection

@@ -23,11 +23,13 @@
           <i class="bi bi-clock-history"></i> Histórico
         </a>
       </li>
+      <!--
       <li class="nav-item">
         <a class="nav-link {{ Route::currentRouteName() == 'logout' ? 'active' : '' }}" href="{{ route('logout') }}">
           <i class="bi bi-box-arrow-left"></i> Sair
         </a>
       </li>
+      -->
     </ul>
   </div>
 

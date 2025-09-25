@@ -84,3 +84,9 @@ function processarDadosDeAnalise(textoCompleto) {
 
     return resultado;
 }
+
+
+const texto1 = `LABORATÓRIO DE ANÁLISE DE SOLOS E MATERIAIS VEGETAIS SINDICATO DOS PRODUTORES RURAIS DE MANHUAÇU E-mail: labsolosindicato@hotmail.com Telefone: (33) 3331-1667 (33) 98444-0890 Rua Cel. José Pedro, 209 - Centro - Manhuaçu/MG Cliente: RITCHELLY DUTRA CPF: Emissão: 18/09/2025 Matrícula: - Propriedade: FAZENDA CATADUPA Município: MATIPÓ Estado: MG Área: - RESULTADO DE ANÁLISE DE SOLO Protocolo Identificação Entrada Cultura Valor S202514643 BROTAÇÃO 08/09/2025 CAFÉ R$0,00 S202514644 PLANTIO 08/09/2025 CAFÉ R$0,00 DETERMINAÇÕES AMOSTRA S202514643 S202514644 PH em água - 5,02 5,12 PH em CaCl 2 - - - PH em KCl - - - P mg/dm 3 12,17 38,04 K + mg/dm 3 221 191 Ca 2+ cmol c/dm 3 2,28 2,89 Mg 2+ cmol c/dm 3 0,83 0,79 Al 3+ cmol c/dm 3 0,70 0,30 H cmol c/dm 3 7,2 6,1 H+Al cmol c/dm 3 7,92 6,41 SB cmol c/dm 3 3,7 4,2 t cmol c/dm 3 4,4 4,5 T cmol c/dm 3 11,6 10,6 V % 31,7 39,4 %m % 16,0 6,7 MO dag/kg 2,61 2,86 Prem mg/L 18,1 24,9 Zn mg/dm 3 2,10 4,50 Fe mg/dm 3 38,7 30,4 Mn mg/dm 3 14,9 43,9 Cu mg/dm 3 0,80 1,00 B mg/dm 3 0,46 0,35 S mg/dm 3 28,6 18,8 K % de T 4,9 4,6 Ca % de T 19,6 27,3 Mg % de T 7,2 7,5 H % de T 62,3 57,8 Al % de T 6,0 2,8 Ca/Mg - 2,7 3,7 Ca/K - 4,0 5,9 Mg/K - 1,5 1,6 PH em água, KCl e CaCl 2 - Relação 1:2,5 P-Remanescente - Solução CaCl 2 - 0,01 mol/L com 60 mg/L de P P-K-Fe-Zn-Mn e Cu - Extrator Mehlich 1 SB - Soma de Bases Trocáveis Ca-Mg-Al - Extrator: KCl - 1 mol/L CTC (t) - Capacidade de Troca Catiônica Efetiva H + Al - Método SMP CTC (T) - Capacidade de Troca Catiônica Total B - Extrator: CaCl 2 - 5 mmol/L em Microondas V - Índice Saturação de Bases S - Extrator: Fosfato monocálcico em ácido acético m - Índice Saturação de Alumínio MO - Matéria orgânica - Colorimetria Responsável Técnico`;
+
+const dadosAnalisados = processarDadosDeAnalise(texto1);
+console.log(JSON.stringify(dadosAnalisados, null, 2));

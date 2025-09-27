@@ -23,10 +23,12 @@
           <i class="bi bi-clock-history"></i> Histórico
         </a>
       </li>
+      {{--
       <li class="nav-item">
           <i class="bi bi-box-arrow-left"></i> Sair
         </a>
       </li>
+      --}}
     </ul>
   </div>
 

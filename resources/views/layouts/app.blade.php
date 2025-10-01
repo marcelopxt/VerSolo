@@ -14,7 +14,8 @@
     <h2><i class="bi bi-leaf"></i> VerSolo</h2>
     <ul class="nav flex-column">
       <li class="nav-item">
-        <a class="nav-link {{ Route::currentRouteName() == 'home' ? 'active' : '' }}" href="{{ route('home') }}">
+        <a class="nav-link {{ Route::currentRouteName() == 'dashboard' ? 'active' : '' }}"
+          href="{{ route('dashboard') }}">
           <i class="bi bi-file-earmark-check"></i> Realizar Análises
         </a>
       </li>
@@ -23,12 +24,15 @@
           <i class="bi bi-clock-history"></i> Histórico
         </a>
       </li>
-      {{--
       <li class="nav-item">
-          <i class="bi bi-box-arrow-left"></i> Sair
-        </a>
+        <form method="POST" action="{{ route('logout') }}">
+          @csrf
+          <a class="nav-link" href="{{ route('logout') }}"
+            onclick="event.preventDefault(); this.closest('form').submit();">
+            <i class="bi bi-box-arrow-left"></i> Sair
+          </a>
+        </form>
       </li>
-      --}}
     </ul>
   </div>
 

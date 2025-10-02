@@ -2,17 +2,6 @@
 @import "bootstrap/dist/css/bootstrap.min.css";
 @import "bootstrap-icons/font/bootstrap-icons.css";
 
-@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
-@source '../../storage/framework/views/*.php';
-@source '../**/*.blade.php';
-@source '../**/*.js';
-
-@theme {
-    --font-sans: "Instrument Sans", ui-sans-serif, system-ui, sans-serif,
-        "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol",
-        "Noto Color Emoji";
-}
-
 body {
     min-height: 100vh;
     overflow-x: hidden;
@@ -56,4 +45,101 @@ a.active {
 .content {
     margin-left: 250px;
     padding: 1rem;
+}
+
+.login-page-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    min-height: 100vh;
+    font-family: sans-serif;
+    background-color: #f5f1f1;
+}
+
+.login-forms-container {
+    display: flex;
+    gap: 40px;
+}
+
+.form-container {
+    display: flex;
+    flex-direction: column;
+    background: #735e59;
+    color: #f5f1f1;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    width: 300px;
+}
+
+.form-container form {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+}
+
+.form-container h2 {
+    text-align: center;
+    color: #f5f1f1;
+    margin-bottom: 1.5rem;
+}
+
+.form-container .form-group {
+    margin-bottom: 15px;
+}
+
+.form-container label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+.form-container .error {
+    color: rgb(255, 167, 167);
+    font-size: 0.8em;
+    margin-top: 4px;
+}
+
+.form-container input {
+    width: 100%;
+    padding: 8px;
+    box-sizing: border-box;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.form-container button {
+    width: 100%;
+    padding: 10px;
+    background-color: #614d48;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.form-container button:hover {
+    background-color: #413430;
+}
+
+.login-logo {
+    text-align: center;
+    margin-bottom: 30px;
+    font-size: 2.5rem;
+    color: #544541;
+}
+
+.login-logo i {
+    vertical-align: middle;
+    font-size: 0.9em;
+}
+
+.form-container .button-group {
+    margin-top: auto;
+    padding-top: 15px;
+}
+
+.btn-primary {
+    --bs-btn-active-bg: #544541;
+    --bs-btn-active-border-color: #544541;
 }

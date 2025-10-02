@@ -15,7 +15,6 @@ return [
         'employee' => [
             'driver' => 'session',
             'provider' => 'employees',
-            'model' => App\Models\Employee::class,
         ],
     ],
 

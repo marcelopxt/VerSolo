@@ -19,9 +19,6 @@ class PdfController extends Controller
         $pdf = $parser->parseFile($pdfFile);
 
         $text = $pdf->getText();
-        $metadata = $pdf->getDetails();
-
-        // dd($text, $metadata);
 
         return $text;
     }

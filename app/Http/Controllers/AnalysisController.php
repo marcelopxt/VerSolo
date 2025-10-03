@@ -14,17 +14,17 @@ class AnalysisController extends Controller
 
     public function reportFiles(Request $request)
     {
-        // $request->validate([
-        //     'file' => 'required|mimes:pdf'
-        // ]);
+        $request->validate([
+            'file' => 'required|mimes:pdf'
+        ]);
 
         $file = $request->file('file');
         $filename = $file->getClientOriginalName();
-        $report = []; 
+        $text = []; 
 
         try {
             $pdfController = new PdfController();
-            $report = $pdfController->readPdf($request);
+            $text = $pdfController->readPdf($request);
 
         } catch (\Exception $e) {
             dd($e);
@@ -32,7 +32,7 @@ class AnalysisController extends Controller
 
         return view('analysis', [
             'filename' => $filename,
-            'report' => $report
+            'text' => $text
         ]);
     }
 

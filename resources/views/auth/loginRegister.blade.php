@@ -10,7 +10,7 @@
 
 <body class="bg-light">
   <div class="login-page-wrapper">
-    <div style="display: flex; flex-direction: column; align-items: center;">
+    <div>
       <h1 class="login-logo">
         <i class="bi bi-leaf"></i>VerSolo
       </h1>

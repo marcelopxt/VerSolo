@@ -20,7 +20,8 @@
                                 if (
                                     str_contains($resultado['diagnostico'], 'inválido') ||
                                     str_contains($resultado['diagnostico'], 'Abaixo') ||
-                                    str_contains($resultado['diagnostico'], 'Acima')
+                                    str_contains($resultado['diagnostico'], 'Acima') ||
+                                    str_contains($resultado['diagnostico'], 'Irregular')
                                 ) {
                                     $protocoloComErro = true;
                                     break; 

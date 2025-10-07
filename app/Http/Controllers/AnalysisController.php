@@ -85,10 +85,11 @@ class AnalysisController extends Controller
             return ['erro' => 'Os dados para análise não foram recebidos corretamente.'];
         }
 
-        $hasError = false;
         $generalRules = config('analise_parametros._regras_gerais');
         $intervalRules = config('analise_parametros.intervalos');
         $phRelationshipV = config('analise_parametros._relacoes.ph_por_v');
+        $comparisonRules = config('analise_parametros.comparacoes');
+        $rulesbyRangeCa = config('analise_parametros.regras_por_faixa_ca');
 
         foreach ($json as $protocol => &$dataSample) {
 
@@ -101,13 +102,11 @@ class AnalysisController extends Controller
 
                 if ($generalRules['nao_negativo'] && $value < 0) {
                     $result['diagnostico'] = 'Valor inválido (negativo)';
-                    $hasError = true;
                     continue;
                 }
 
                 if ($generalRules['nao_zero'] && $value == 0) {
                     $result['diagnostico'] = 'Valor inválido (zero)';
-                    $hasError = true;
                     continue;
                 }
             }
@@ -121,11 +120,11 @@ class AnalysisController extends Controller
                 foreach ($phRelationshipV as $range) {
                     if ($valueV >= $range['v_min'] && $valueV <= $range['v_max']) {
                         if ($valuePh < $range['ph_min']) {
-                            $diagnosisPh = "Abaixo do ideal para V=$valueV (faixa ideal: {$range['ph_min']}-{$range['ph_max']}";
-                            $hasError = true;
+                            $diagnosisPh = "Abaixo do ideal para V=$valueV (faixa ideal: {$range['ph_min']}-{$range['ph_max']})";
+                    
                         } elseif ($valuePh > $range['ph_max']) {
-                            $diagnosisPh = "Acima do ideal para V=$valueV (faixa ideal: {$range['ph_min']}-{$range['ph_max']}";
-                            $hasError = true;
+                            $diagnosisPh = "Acima do ideal para V=$valueV (faixa ideal: {$range['ph_min']}-{$range['ph_max']})";
+                    
                         } else {
                             $diagnosisPh = 'Dentro do ideal para o V%';
                         }
@@ -143,12 +142,55 @@ class AnalysisController extends Controller
                 if ($param) {
                     if (isset($param['min']) && $value < $param['min']) {
                         $result['diagnostico'] = "Abaixo do ideal (mínimo: {$param['min']})";
-                        $hasError = true;
+                
                     } elseif (isset($param['max']) && $value > $param['max']) {
                         $result['diagnostico'] = "Acima do ideal (mínimo: {$param['max']})";
-                        $hasError = true;
+                
                     } else {
                         $result['diagnostico'] = "Dentro do ideal";
+                    }
+                }
+            }
+
+            // Regras de comparativo
+            foreach ($comparisonRules as $rule) {
+                $el1 = $rule['elemento1'];
+                $el2 = $rule['elemento2'];
+
+                if (isset($dataSample[$el1], $dataSample[$el2])) {
+                    $val1 = $dataSample[$el1]['valor'];
+                    $val2 = $dataSample[$el2]['valor'];
+
+                    // A regra é 'Mg < Ca', então se Mg for >= Ca, está irregular
+                    if ($val1 >= $val2) {
+                        $dataSample[$el1]['diagnostico'] = $rule['mensagem'];
+                    }
+                }
+            }
+
+            // Regras Condicionais por Faixa de Ca ---
+            if (isset($dataSample['Ca 2+'])) {
+                $valueCa = $dataSample['Ca 2+']['valor'];
+
+                foreach ($rulesbyRangeCa as $condicionalRule) {
+                    $range = $condicionalRule['ca_faixa'];
+                    $caMin = $range['min'] ?? -INF;
+                    $caMax = $range['max'] ?? INF;
+
+                    // Verifica se o Ca da amostra está na faixa da regra
+                    if ($valueCa >= $caMin && $valueCa < $caMax) {
+                        // Se estiver, aplica as sub-regras para Alumínio (e pode ser aplicada a outro sub-elemento)
+                        foreach ($condicionalRule['regras'] as $chave => $subRegra) {
+                            if (isset($dataSample[$chave])) {
+                                $valueEl = $dataSample[$chave]['valor'];
+                                $subMin = $subRegra['min'] ?? -INF;
+                                $subMax = $subRegra['max'] ?? INF;
+
+                                if ($valueEl < $subMin || $valueEl > $subMax) {
+                                    $dataSample[$chave]['diagnostico'] = "Irregular para a faixa de Ca ($valueCa)";
+                                }
+                            }
+                        }
                     }
                 }
             }

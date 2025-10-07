@@ -11,7 +11,6 @@ return [
     '_regras_gerais' => [
         'nao_negativo' => true, // Não pode haver valores negativos
         'nao_zero' => true,     // Não pode haver valores iguais a zero
-        'Mg' > "Ca"
     ],
 
 
@@ -25,6 +24,14 @@ return [
         'Prem' => ['min' => 4.00, 'max' => 55.00],  // Fósforo Remanescente
         'B' => ['min' => 0.20, 'max' => 2.00],      // Boro
         'S' => ['min' => 8.00, 'max' => 90.00],      // Enxofre
+
+        'P' => ['min' => 2.0, 'max' => 80.0],
+        'K +' => ['min' => 10.0, 'max' => 220.0],
+        'Ca 2+' => ['max' => 10.0],
+        'Zn' => ['min' => 1.00, 'max' => 12.00],
+        'Cu' => ['min' => 0.10, 'max' => 5.00],
+        'Mn' => ['min' => 1.00, 'max' => 20.00],
+        'Fe' => ['min' => 20.00, 'max' => 150.00],
     ],
 
 
@@ -44,4 +51,37 @@ return [
             ['v_min' => 80, 'v_max' => 100, 'ph_min' => 6.42, 'ph_max' => 6.99],
         ],
     ],
+
+    // Regra de comparação entre dois elementos (Mg > Ca)
+    'comparacoes' => [
+        ['elemento1' => 'Mg 2+', 'operador' => '<', 'elemento2' => 'Ca 2+', 'mensagem' => 'Valor de Mg deve ser menor que o de Ca'],
+    ],
+
+    'regras_por_faixa_ca' => [
+        [
+            'ca_faixa' => ['min' => 0.20, 'max' => 1.30],
+            'regras' => [
+                'Al 3+' => ['min' => 0.50, 'max' => 1.90],
+            ]
+        ],
+        [
+            'ca_faixa' => ['min' => 1.30, 'max' => 3.40],
+            'regras' => [
+                'Al 3+' => ['min' => 0.30, 'max' => 1.00],
+            ]
+        ],
+        [
+            'ca_faixa' => ['min' => 3.40, 'max' => 4.50],
+            'regras' => [
+                'Al 3+' => ['max' => 1.00],
+            ]
+        ],
+        [
+            'ca_faixa' => ['min' => 5.00],
+            'regras' => [
+                'Al 3+' => ['max' => 0.80],
+            ]
+        ],
+
+    ]
 ];

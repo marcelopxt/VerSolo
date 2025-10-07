@@ -16,27 +16,39 @@ class AnalysisController extends Controller
     public function reportFiles(Request $request)
     {
         $request->validate([
-            'file' => 'required|mimes:pdf'
+            'file' => 'required|array',
+            'file.*' => 'required|mimes:pdf'
         ]);
 
-        $file = $request->file('file');
-        $filename = $file->getClientOriginalName();
-        $rawText = [];
+        $allAnalyses = [];
+        $fileNames = [];
 
-        try {
-            $pdfController = new PdfController();
-            $rawText = $pdfController->readPdf($request);
+        foreach ($request->file('file') as $file) {
+            $filename = $file->getClientOriginalName();
+            $rawText = [];
 
-        } catch (\Exception $e) {
-            dd($e);
+            try {
+
+                $pdfController = new PdfController();
+                $singleFileRequest = new Request();
+                $singleFileRequest->files->set('file', $file);
+                $rawText = $pdfController->readPdf($singleFileRequest);
+
+            } catch (\Exception $e) {
+                $allAnalyses[$filename] = ['erro' => 'Não foi possível ler o arquivo: ' . $e->getMessage()];
+                continue;
+            }
+
+            $extractedData = AnalysisController::extractRegex($rawText);
+            $dataDisgnosis = AnalysisController::reportInterpretation($extractedData);
+
+            $allAnalyses[$filename] = $dataDisgnosis;
+            $fileNames[] = $filename;
         }
 
-        $extractedData = AnalysisController::extractRegex($rawText);
-        $dataDisgnosis = AnalysisController::reportInterpretation($extractedData);
-
         return view('analysis', [
-            'filename' => $filename,
-            'analise' => $dataDisgnosis
+            'filenames' => $fileNames,
+            'allAnalyses' => $allAnalyses
         ]);
     }
 
@@ -121,10 +133,10 @@ class AnalysisController extends Controller
                     if ($valueV >= $range['v_min'] && $valueV <= $range['v_max']) {
                         if ($valuePh < $range['ph_min']) {
                             $diagnosisPh = "Abaixo do ideal para V=$valueV (faixa ideal: {$range['ph_min']}-{$range['ph_max']})";
-                    
+
                         } elseif ($valuePh > $range['ph_max']) {
                             $diagnosisPh = "Acima do ideal para V=$valueV (faixa ideal: {$range['ph_min']}-{$range['ph_max']})";
-                    
+
                         } else {
                             $diagnosisPh = 'Dentro do ideal para o V%';
                         }
@@ -142,10 +154,10 @@ class AnalysisController extends Controller
                 if ($param) {
                     if (isset($param['min']) && $value < $param['min']) {
                         $result['diagnostico'] = "Abaixo do ideal (mínimo: {$param['min']})";
-                
+
                     } elseif (isset($param['max']) && $value > $param['max']) {
                         $result['diagnostico'] = "Acima do ideal (mínimo: {$param['max']})";
-                
+
                     } else {
                         $result['diagnostico'] = "Dentro do ideal";
                     }

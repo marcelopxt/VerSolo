@@ -3,8 +3,20 @@
 @section('title', 'VerSolo | Início')
 
 @section('content')
+    <h3>Realizar uma nova leitura</h3>
+    <span>A leitura atual ficará salva no histórico</span>
+    <form action="/report" method="post" enctype="multipart/form-data">
+        @csrf
+        @if (!empty($allAnalyses))
+            <input type="hidden" name="previous_analysis_data" value="{{ json_encode($allAnalyses) }}">
+        @endif
+        <div class="mb-3">
+            <input type="file" class="form-control" name="file[]" id="input-file" multiple="multiple" />
+            <br>
+            <button type="submit" class="btn btn-outline-dark">Enviar</button>
+        </div>
+    </form>
     @if (!empty($filenames) && !empty($allAnalyses))
-
         <div class="container mt-4">
             {{-- Loop principal para iterar sobre cada arquivo analisado --}}
             @forelse ($allAnalyses as $filename => $analise)
@@ -49,6 +61,7 @@
                                     <th class="text-center">Valor</th>
                                     <th>Unidade</th>
                                     <th>Diagnóstico</th>
+                                    <th>Ação</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -73,6 +86,19 @@
                                         <td class="text-center">{{ $resultado['valor'] ?? 'N/A' }}</td>
                                         <td>{{ $resultado['unidade'] ?? '' }}</td>
                                         <td>{{ $resultado['diagnostico'] ?? 'N/A' }}</td>
+                                        <td>
+                                            @if (isset($resultado['diagnostico']) && $resultado['diagnostico'] != 'N/A')
+                                                <div class="btn-group" role="group" data-bs-toggle="buttons">
+                                                    <label class="btn btn-primary active">
+                                                        <input type="checkbox" class="me-2"
+                                                            name="ignored_errors[{{ $filename }}][{{ $protocolo }}][{{ $chave }}]"
+                                                            value="1" autocomplete="off" />
+                                                        Ignorar Erro
+                                                    </label>
+                                                </div>
+                                            @endif
+
+                                        </td>
                                     </tr>
                                 @endforeach
                             </tbody>
@@ -92,14 +118,4 @@
             @endforelse
         </div>
     @endif
-
-    <form action="/report" method="post" enctype="multipart/form-data">
-        @csrf
-        <div class="mb-3">
-            <label for="" class="form-label">Choose file</label>
-            <input type="file" class="form-control" name="file[]" id="input-file" multiple="multiple" />
-            <br>
-            <button type="submit" class="btn btn-outline-dark">Enviar</button>
-        </div>
-    </form>
 @endsection

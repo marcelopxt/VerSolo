@@ -15,6 +15,7 @@ class AnalysisController extends Controller
 
     public function reportFiles(Request $request)
     {
+        // dd($request->all());
         if ($request->has('previous_analysis_data')) {
             $previousAnalyses = json_decode($request->input('previous_analysis_data'), true);
             $ignoredErrors = $request->input('ignored_errors', []);

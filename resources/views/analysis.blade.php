@@ -5,7 +5,7 @@
 @section('content')
     <h3>Realizar uma nova leitura</h3>
     <span>A leitura atual ficará salva no histórico</span>
-    <form action="/report" method="post" enctype="multipart/form-data">
+    <form action="/report" method="post" enctype="multipart/form-data" id="analysis-form">
         @csrf
         @if (!empty($allAnalyses))
             <input type="hidden" name="previous_analysis_data" value="{{ json_encode($allAnalyses) }}">
@@ -90,14 +90,13 @@
                                             @if (isset($resultado['diagnostico']) && $resultado['diagnostico'] != 'N/A')
                                                 <div class="btn-group" role="group" data-bs-toggle="buttons">
                                                     <label class="btn btn-primary active">
-                                                        <input type="checkbox" class="me-2"
+                                                        <input type="checkbox" class="me-2 ignore-checkbox"
                                                             name="ignored_errors[{{ $filename }}][{{ $protocolo }}][{{ $chave }}]"
                                                             value="1" autocomplete="off" />
                                                         Ignorar Erro
                                                     </label>
                                                 </div>
                                             @endif
-
                                         </td>
                                     </tr>
                                 @endforeach
@@ -118,4 +117,31 @@
             @endforelse
         </div>
     @endif
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const mainForm = document.getElementById('analysis-form');
+            if (mainForm) {
+                mainForm.addEventListener('submit', function(event) {
+                    // Impede o envio imediato do formulário
+                    event.preventDefault();
+
+                    // Encontra todos os checkboxes para ignorar erro que estão marcados na página inteira
+                    const checkedCheckboxes = document.querySelectorAll('.ignore-checkbox:checked');
+
+                    // Para cada checkbox marcado, cria um input hidden no formulário principal
+                    checkedCheckboxes.forEach(checkbox => {
+                        const hiddenInput = document.createElement('input');
+                        hiddenInput.type = 'hidden';
+                        hiddenInput.name = checkbox.name;
+                        hiddenInput.value = checkbox.value;
+                        mainForm.appendChild(hiddenInput);
+                    });
+
+                    // Agora, envia o formulário com os dados dos checkboxes adicionados
+                    mainForm.submit();
+                });
+            }
+        });
+    </script>
 @endsection

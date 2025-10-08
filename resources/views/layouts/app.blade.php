@@ -28,7 +28,7 @@
   <div class="sidebar">
     <h2><i class="bi bi-leaf"></i>VerSolo</h2>
     @auth('employee')
-      <li class="nav-item mt-auto p-3" style="color: #ccc;">
+      <li class="nav-item mt-auto p-3" id="loginInfo">
         <i class="bi bi-person-circle"></i>
         <span>Logado como: <strong>{{ auth('employee')->user()->name }}</strong></span>
       </li>
@@ -48,10 +48,9 @@
       <li class="nav-item">
         <form method="POST" action="{{ route('logout') }}">
           @csrf
-          <a class="nav-link" href="{{ route('logout') }}"
-            onclick="event.preventDefault(); this.closest('form').submit();">
+          <button type="submit" class="nav-link">
             <i class="bi bi-box-arrow-left"></i> Sair
-          </a>
+          </button>
         </form>
       </li>
     </ul>

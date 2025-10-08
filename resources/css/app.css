@@ -27,9 +27,20 @@ body {
     margin-bottom: 0.5em;
 }
 
+#loginInfo {
+    color: #ccc;
+}
+
 .nav-link {
     color: #f5f1f1;
     font-size: 1em;
+}
+
+button.nav-link {
+    text-align: left;
+    width: 100%;
+    display: block;
+    padding: var(--bs-nav-link-padding-y) var(--bs-nav-link-padding-x);
 }
 
 a.active {
@@ -60,6 +71,12 @@ a.active {
 .login-forms-container {
     display: flex;
     gap: 40px;
+}
+
+.login-page-wrapper > div {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 .form-container {

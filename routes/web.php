@@ -1,7 +1,6 @@
 <?php
 
 use App\Http\Controllers\AuthController;
-use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\AnalysisController;
 use App\Http\Controllers\HistoryController;
 use Illuminate\Support\Facades\Route;
@@ -15,5 +14,4 @@ Route::middleware(['auth:employee'])->group(function () {
   Route::get('/dashboard', [AnalysisController::class, 'uploadFiles'])->name('dashboard');
   Route::post('/report', [AnalysisController::class, 'reportFiles'])->name('report.submit');
   Route::get('/history', [HistoryController::class, 'history'])->name('history');
-  Route::resource('employees', EmployeeController::class);
 });

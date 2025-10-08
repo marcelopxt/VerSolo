@@ -6,7 +6,7 @@
   @if (!empty($filename))
     <h1>Nome do Arquivo: {{$filename}}</h1>
   @endif
-  <form action="/report" method="post" enctype="multipart/form-data">
+  <form action={{ route('report.submit') }} method="post" enctype="multipart/form-data">
     @csrf
     <div class="mb-3">
       <label for="" class="form-label">Choose file</label>

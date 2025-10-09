@@ -14,6 +14,7 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 Route::middleware(['auth:employee'])->group(function () {
   Route::get('/dashboard', [AnalysisController::class, 'uploadFiles'])->name('dashboard');
   Route::post('/report', [AnalysisController::class, 'reportFiles'])->name('report.submit');
+  Route::post('/save-analysis', [AnalysisController::class, 'saveAnalysis'])->name('analysis.save');
   Route::get('/history', [HistoryController::class, 'history'])->name('history');
   Route::resource('employees', EmployeeController::class);
 });

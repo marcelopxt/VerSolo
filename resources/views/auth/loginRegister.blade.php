@@ -42,7 +42,7 @@
             @csrf
             <div>
               <div class="form-group">
-                <label for="register-name">Nome Completo</label>
+                <label for="register-name">Nome</label>
                 <input id="register-name" type="text" name="name" class="form-control"
                   value="{{ $errors->hasBag('register') ? old('name') : '' }}" required>
                 @error('name', 'register') <span class="error">{{ $message }}</span> @enderror

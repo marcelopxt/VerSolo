@@ -9,7 +9,7 @@ class Analysis extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['report', 'status', 'consultation_id'];
+    protected $fillable = ['report', 'status', 'consultation_id', 'protocol'];
 
     public function consultation()
     {

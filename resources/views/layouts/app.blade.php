@@ -35,7 +35,7 @@
     @endauth
     <ul class="nav flex-column">
       <li class="nav-item">
-        <a class="nav-link {{ Route::currentRouteName() == 'dashboard' ? 'active' : '' }}"
+        <a class="nav-link {{ in_array(Route::currentRouteName(), ["dashboard", "report.submit"]) ? 'active' : '' }}"
           href="{{ route('dashboard') }}">
           <i class="bi bi-file-earmark-check"></i> Realizar Análises
         </a>

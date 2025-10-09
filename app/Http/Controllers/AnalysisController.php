@@ -49,11 +49,17 @@ class AnalysisController extends Controller
         }
 
         // Salvar automaticamente no histórico após processamento
+        $consultationId = null;
+        $autoSaved = false;
+        
         if (!empty($allAnalyses)) {
             try {
                 $consultationController = new ConsultationController();
-                $consultationController->store($allAnalyses);
+                $consultationId = $consultationController->store($allAnalyses);
                 $autoSaved = true;
+                
+                // Salvar ID da consulta na sessão para evitar duplicatas
+                session(['last_consultation_id' => $consultationId]);
             } catch (\Exception $e) {
                 $autoSaved = false;
                 \Log::error('Erro ao salvar automaticamente no histórico: ' . $e->getMessage());
@@ -63,7 +69,8 @@ class AnalysisController extends Controller
         return view('analysis', [
             'filenames' => $fileNames,
             'allAnalyses' => $allAnalyses,
-            'autoSaved' => $autoSaved ?? false
+            'autoSaved' => $autoSaved,
+            'consultationId' => $consultationId
         ]);
     }
 
@@ -212,6 +219,7 @@ class AnalysisController extends Controller
         try {
             $analysisData = $request->input('analysis_data');
             $ignoredErrors = $request->input('ignored_errors', []);
+            $consultationId = $request->input('consultation_id');
 
             if (!empty($analysisData)) {
                 $analysisData = json_decode($analysisData, true);
@@ -224,14 +232,28 @@ class AnalysisController extends Controller
                         foreach ($fileAnalysis as $protocol => &$protocolData) {
                             if (!is_array($protocolData)) continue;
 
+                            $countError = 0;
                             foreach ($protocolData as $key => &$analysisItem) {
                                 if ($key === 'status' || !is_array($analysisItem)) continue;
 
                                 if (isset($ignoredErrors[$filename][$protocol][$key])) {
                                     $analysisItem['diagnostico'] = 'N/A';
                                 }
+
+                                // Recontar erros após aplicar ignorados
+                                if (isset($analysisItem['diagnostico']) && 
+                                    $analysisItem['diagnostico'] !== 'N/A' &&
+                                    (str_contains($analysisItem['diagnostico'], 'inválido') ||
+                                     str_contains($analysisItem['diagnostico'], 'Abaixo') ||
+                                     str_contains($analysisItem['diagnostico'], 'Acima') ||
+                                     str_contains($analysisItem['diagnostico'], 'Irregular'))) {
+                                    $countError++;
+                                }
                             }
                             unset($analysisItem);
+
+                            // Atualizar status baseado na contagem de erros
+                            $protocolData['status'] = $countError == 0 ? 'approved' : 'rejected';
                         }
                         unset($protocolData);
                     }
@@ -239,11 +261,11 @@ class AnalysisController extends Controller
                 }
 
                 $consultationController = new ConsultationController();
-                $consultationController->store($analysisData);
+                $consultationController->store($analysisData, $consultationId);
 
                 return response()->json([
                     'success' => true,
-                    'message' => 'Análise salva no histórico com sucesso!'
+                    'message' => 'Análise atualizada no histórico com sucesso!'
                 ]);
             }
 
